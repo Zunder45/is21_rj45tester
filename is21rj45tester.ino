@@ -5,7 +5,7 @@ int pinWGreen = 4;
 int pinBlue = 7;
 int pinWBlue = 6;
 int pinBrown = 9;
-int pinWBrown = L;
+int pinWBrown = 8;
 
 int pin[] = {pinOrange,
              pinGreen,
@@ -27,6 +27,10 @@ void setup() {
   pinMode(pinGreen, OUTPUT);
   pinMode(pinBlue, OUTPUT);
   pinMode(pinBrown, OUTPUT);
+
+  pinMode(10, OUTPUT);
+  pinMode(11, OUTPUT);
+  pinMode(12, OUTPUT);
   pinMode(13, OUTPUT);
 //  Serial.print(sizeof(pin));
 
