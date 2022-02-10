@@ -12,119 +12,117 @@ int pinWBrown = 8;
 int tonePin = 12;
 int bttPin = 11;
 
-int pin[] = {
+int pins[] = {
+             pinWOrange,
+             pinWGreen,
+             pinWBlue,
+             pinWBrown,
              pinOrange,
              pinGreen,
              pinBlue,
              pinBrown
+             
 };
-int wpin[] = {
-               pinWOrange,
-               pinWGreen,
-               pinWBlue,
-               pinWBrown
-};
+
+
+String textStartscreen[2] = {"LAN tester v3.0","IS-21|2022|O.D."};
+String textFirstLine = "Pins:12345678";
 
 LiquidCrystal_I2C lcd(0x27, 16, 2);
 
 void setup() {
+  startscreen();
   Serial.begin(9600);
   
   pinMode(bttPin, INPUT_PULLUP);
   pinMode(tonePin, OUTPUT);
 
-  lcd.begin();
-  lcd.backlight();
-  lcd.home();
-  lcd.print("Pins:12345678");
-
-
+  delay(4000);
+  endStartscreen();
 }
 
 void loop() {
 
-  if(digitalRead(bttPin)){
-    while(true){
-      if(!digitalRead(bttPin)){
-         break;
-      }
-    }
+    if(digitalRead(bttPin)){
+      while(true){
+        if(!digitalRead(bttPin)){
+           break;
+        }
+     }
     clearLcd();
+    
     for(int i = 0; i < 4; i++){
-       pinMode(wpin[i], OUTPUT);
-       digitalWrite(wpin[i], HIGH);
-       
-       if(digitalRead(pinOrange)){
+      beginWrite(pins[i]);
+
+      if(digitalRead(pins[i+4])){
+          writeLcd(pins[i],String(pins[i+4]-1, DEC)); 
+          writeLcd(pins[i]-1,String(pins[i+4]-2, DEC)); 
           beep(3440,30);
-          writeLcd(wpin[i],String(pinWOrange-1, DEC));
-       }
-       else if(digitalRead(pinGreen)){
-          beep(3440,30);
-          writeLcd(wpin[i],String(pinWGreen-1, DEC));
-          
-       }
-       else if(digitalRead(pinBlue)){
-          beep(3440,30);
-          writeLcd(wpin[i],String(pinWBlue-1, DEC));
-       }
-       else if(digitalRead(pinBrown)){
-          writeLcd(wpin[i],String(pinWBrown-1, DEC));
-          beep(1318.5,50);
-       }
-       else{
-          writeLcd(wpin[i], "X"); 
-          beep(440,300);
-       }
-       digitalWrite(wpin[i], LOW);
-       pinMode(wpin[i], INPUT);
-       delay(500);
+      }
+      else{
+          writeLcd(pins[i],"X"); 
+          writeLcd(pins[i]-1,"X");
+          beep(440,300); 
+      }
+      endingWrite(pins[i]); 
+      delay(500); 
     }
-    for(int i = 0; i < 4; i++){
-       pinMode(pin[i], OUTPUT);
-       digitalWrite(pin[i], HIGH);
+ 
+    
       
-       if(digitalRead(pinWOrange)){
-          beep(3440,30);
-          writeLcd(pin[i],String(pinOrange-1, DEC));
-       }
-       else if(digitalRead(pinWGreen)){
-          beep(3440,30);
-          writeLcd(pin[i],String(pinGreen-1, DEC));
-          
-       }
-       else if(digitalRead(pinWBlue)){
-          beep(3440,30);
-          writeLcd(pin[i],String(pinBlue-1, DEC));
-       }
-       else if(digitalRead(pinWBrown)){
-          beep(1318.5,50);
-          writeLcd(pin[i],String(pinBrown-1, DEC));
-       }
-       else{
-          writeLcd(pin[i], "X"); 
-          beep(440,300);
-       }
-       digitalWrite(pin[i], LOW);
-       pinMode(pin[i], INPUT);
-       delay(500);
-    }
   }
-  
+}
+
+//int testOthersPins(int ignorePin){
+//  for(int i = 0; i < sizeof(pins); i++){
+//     if(pins[i] != ignorePin){
+//      if(digitalRead(pins[i])){
+//        return i; 
+//      }
+//     }
+//  }
+//  return false;
+//}
+
+void startscreen(){
+  lcd.begin();
+  lcd.backlight();
+  lcd.home();
+
+  lcd.print(textStartscreen[0]);
+  lcd.setCursor(0,1);
+  lcd.print(textStartscreen[1]);
+}
+
+void endStartscreen(){
+  clearLcd();
+}
+
+
+
+void endingWrite(int pin){
+  pinMode(pin, INPUT);
+  digitalWrite(pin, LOW); 
+}
+void beginWrite(int pin){
+  pinMode(pin, OUTPUT);
+  digitalWrite(pin, HIGH);
 }
 
 void led(int n, int speed){
-      digitalWrite(n, HIGH);
-      delay(speed);
-      digitalWrite(n, LOW);
-      delay(speed/2);
+  digitalWrite(n, HIGH);
+  delay(speed);
+  digitalWrite(n, LOW);
+  delay(speed/2);
 }
 void clearLcd(){
   lcd.clear();
-  lcd.print("Pins:12345678");
+  lcd.home();
+  lcd.print(textFirstLine);
 }
 
 void writeLcd(int x1, String ch){
-  int position = 4+x1-1;
+  int position = 4+x1;
   lcd.setCursor(position,1);
   lcd.print(ch);
 }
