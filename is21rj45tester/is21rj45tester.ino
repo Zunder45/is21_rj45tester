@@ -1,16 +1,16 @@
 #include <LiquidCrystal_I2C.h>
 
-int pinOrange = 3;
+int pinOrange  = 3;
 int pinWOrange = 2;
-int pinGreen = 5;
-int pinWGreen = 4;
-int pinBlue = 7;
-int pinWBlue = 6;
-int pinBrown = 9;
-int pinWBrown = 8;
+int pinGreen   = 5;
+int pinWGreen  = 4;
+int pinBlue    = 7;
+int pinWBlue   = 6;
+int pinBrown   = 9;
+int pinWBrown  = 8;
 
 int tonePin = 12;
-int bttPin = 11;
+int bttPin  = 11;
 
 int pins[] = {
              pinWOrange,
@@ -20,24 +20,24 @@ int pins[] = {
              pinOrange,
              pinGreen,
              pinBlue,
-             pinBrown
-             
+             pinBrown             
 };
 
 
 String textStartscreen[2] = {"LAN tester v3.0","IS-21|2022|O.D."};
 String textFirstLine = "Pins:12345678";
+String textSecondLine = "";
 
 LiquidCrystal_I2C lcd(0x27, 16, 2);
 
 void setup() {
   startscreen();
+  
   Serial.begin(9600);
   
   pinMode(bttPin, INPUT_PULLUP);
   pinMode(tonePin, OUTPUT);
 
-  delay(4000);
   endStartscreen();
 }
 
@@ -48,7 +48,8 @@ void loop() {
         if(!digitalRead(bttPin)){
            break;
         }
-     }
+    }
+    
     clearLcd();
     
     for(int i = 0; i < 4; i++){
@@ -64,12 +65,10 @@ void loop() {
           writeLcd(pins[i]-1,"X");
           beep(440,300); 
       }
+      
       endingWrite(pins[i]); 
       delay(500); 
     }
- 
-    
-      
   }
 }
 
@@ -84,6 +83,8 @@ void loop() {
 //  return false;
 //}
 
+
+// Startscreen {
 void startscreen(){
   lcd.begin();
   lcd.backlight();
@@ -95,11 +96,13 @@ void startscreen(){
 }
 
 void endStartscreen(){
+  delay(4000);
   clearLcd();
 }
+// } Startscreen
 
 
-
+// Write LCD {
 void endingWrite(int pin){
   pinMode(pin, INPUT);
   digitalWrite(pin, LOW); 
@@ -108,13 +111,10 @@ void beginWrite(int pin){
   pinMode(pin, OUTPUT);
   digitalWrite(pin, HIGH);
 }
+// } Write LCD
 
-void led(int n, int speed){
-  digitalWrite(n, HIGH);
-  delay(speed);
-  digitalWrite(n, LOW);
-  delay(speed/2);
-}
+
+// LCD {
 void clearLcd(){
   lcd.clear();
   lcd.home();
@@ -126,9 +126,19 @@ void writeLcd(int x1, String ch){
   lcd.setCursor(position,1);
   lcd.print(ch);
 }
+// } LCD
+
 
 void beep(int h, int dly){
   tone(tonePin,h);
   delay(dly);
   noTone(tonePin);
+}
+
+
+void led(int n, int speed){
+  digitalWrite(n, HIGH);
+  delay(speed);
+  digitalWrite(n, LOW);
+  delay(speed/2);
 }
