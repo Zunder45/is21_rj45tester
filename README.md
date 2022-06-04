@@ -14,7 +14,7 @@
 
 ![](./img/IMG_20220213_134850.jpg)
 
-![](./img/IMG_20220311_160111.jpg)
+![](./img/VDele.jpg)
 
 ![](./img/zaglushka.jpg)
 
