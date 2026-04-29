@@ -2,7 +2,7 @@
 
 [is21_rj45tester 1C](https://github.com/Zunder45/is21_rj45tester_1C)
 
-[Cайт](http://88.205.135.82:7071/testerRJ45/)
+[Cайт](st.anosov.ru/testerRJ45/)
 
 # Схема
 
